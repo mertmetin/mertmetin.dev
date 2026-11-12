@@ -4,12 +4,15 @@
     <title><%= content_for?(:title) ? "#{yield(:title)} · Mert Metin" : "Mert Metin · Senior Software Engineer" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Mert Metin, Senior Software Engineer in Ottawa. Full-stack web and mobile apps, search and machine learning." %>">
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="dark light">
     <meta property="og:title" content="<%= content_for?(:title) ? yield(:title) : "Mert Metin" %>">
     <meta property="og:description" content="Senior Software Engineer in Ottawa">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
@@ -17,19 +20,21 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-paper text-ink antialiased">
+  <body class="overflow-x-clip bg-paper font-sans text-ink antialiased selection:bg-accent/30">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-ink focus:px-3 focus:py-2 focus:text-paper">Skip to content</a>
 
-    <header class="mx-auto flex max-w-5xl items-center justify-between px-4 py-6 sm:px-6">
-      <%= link_to root_path, class: "flex items-center gap-2.5 font-semibold tracking-tight" do %>
-        <span class="grid size-8 place-items-center rounded-lg bg-accent text-sm font-bold text-white" aria-hidden="true">MM</span>
-        <span>Mert Metin</span>
-      <% end %>
-      <nav aria-label="Main" class="flex items-center gap-1 text-sm text-ink-2">
-        <%= link_to "Work", root_path(anchor: "work"), class: "rounded-md px-3 py-2 hover:bg-tint hover:text-ink" %>
-        <%= link_to "About", root_path(anchor: "about"), class: "rounded-md px-3 py-2 hover:bg-tint hover:text-ink" %>
-        <%= link_to "GitHub", "https://github.com/mertmetin", class: "rounded-md px-3 py-2 hover:bg-tint hover:text-ink", rel: "me" %>
-      </nav>
+    <header class="sticky top-0 z-40 border-b border-line/70 bg-paper/80 backdrop-blur">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3.5 sm:px-6">
+        <%= link_to root_path, class: "font-mono text-sm font-semibold tracking-tight" do %>
+          <span class="text-accent-ink">~/</span>mertmetin<span class="hidden text-ink-3 sm:inline">.dev</span>
+        <% end %>
+        <nav aria-label="Main" class="flex items-center gap-0.5 font-mono text-[13px] whitespace-nowrap text-ink-2">
+          <%= link_to "work", root_path(anchor: "work"), class: "rounded-md px-2.5 py-1.5 hover:bg-tint hover:text-ink" %>
+          <%= link_to "stack", root_path(anchor: "stack"), class: "hidden rounded-md px-2.5 py-1.5 hover:bg-tint hover:text-ink sm:inline" %>
+          <%= link_to "about", root_path(anchor: "about"), class: "rounded-md px-2.5 py-1.5 hover:bg-tint hover:text-ink" %>
+          <%= link_to "https://github.com/mertmetin", class: "rounded-md px-2.5 py-1.5 hover:bg-tint hover:text-ink", rel: "me" do %>github<span aria-hidden="true" class="text-ink-3"> ↗</span><% end %>
+        </nav>
+      </div>
     </header>
 
     <main id="main" class="mx-auto max-w-5xl px-4 pb-24 sm:px-6">
@@ -37,9 +42,9 @@
     </main>
 
     <footer class="border-t border-line">
-      <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-8 text-sm text-ink-3 sm:px-6">
-        <p>© <%= Date.current.year %> Mert Metin · Ottawa</p>
-        <p>Built with Ruby on Rails · <%= link_to "Source", "https://github.com/mertmetin/mertmetin.dev", class: "underline decoration-line underline-offset-4 hover:text-ink" %></p>
+      <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-8 font-mono text-xs text-ink-3 sm:px-6">
+        <p>© <%= Date.current.year %> Mert Metin · Ottawa, ON</p>
+        <p>Ruby on Rails <%= Rails.version %> · <%= link_to "source", "https://github.com/mertmetin/mertmetin.dev", class: "underline decoration-line underline-offset-4 hover:text-ink" %></p>
       </div>
     </footer>
   </body>

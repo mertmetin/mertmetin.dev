@@ -1,34 +1,64 @@
 @import "tailwindcss";
 
-/* Colour tokens: one place to change the palette. Dark mode follows the OS. */
+/* Colour tokens: one place to change the palette. Dark is the main look;
+   light follows the OS setting. */
 @theme {
-  --color-paper: #fcfcfb;
-  --color-card: #ffffff;
-  --color-tint: #f2f1ee;
-  --color-line: #e4e3df;
-  --color-ink: #141413;
-  --color-ink-2: #4a4945;
-  --color-ink-3: #6f6e68;
-  --color-accent: #c84b18;
-  --color-accent-ink: #a83e12;
+  --color-paper: #0d1117;
+  --color-card: #11161d;
+  --color-tint: #1a212b;
+  --color-line: #262e39;
+  --color-ink: #e6edf3;
+  --color-ink-2: #b1bac4;
+  --color-ink-3: #8b949e;
+  --color-accent: #3fb950;
+  --color-accent-ink: #56d364;
+  --color-cyan: #79c0ff;
+  --color-violet: #d2a8ff;
+  --color-amber: #e3b341;
 
-  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --color-paper: #161615;
-    --color-card: #1f1f1d;
-    --color-tint: #2a2a27;
-    --color-line: #34342f;
-    --color-ink: #f2f1ec;
-    --color-ink-2: #c7c6bd;
-    --color-ink-3: #9a9991;
-    --color-accent: #d9541e;
-    --color-accent-ink: #f08a62;
+    --color-paper: #fbfbfa;
+    --color-card: #ffffff;
+    --color-tint: #f1f2f4;
+    --color-line: #d8dce1;
+    --color-ink: #1f2328;
+    --color-ink-2: #424a53;
+    --color-ink-3: #636c76;
+    --color-accent: #1a7f37;
+    --color-accent-ink: #1a7f37;
+    --color-cyan: #0969da;
+    --color-violet: #8250df;
+    --color-amber: #9a6700;
   }
 }
 
-html { scroll-behavior: smooth; }
+/* The hero grid bleeds to the screen edges; never let it widen the page. */
+html { scroll-behavior: smooth; overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Faint engineering-paper grid behind the hero. */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-line) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 55%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at 30% 20%, black 30%, transparent 75%);
+}
+
+/* Terminal cursor. */
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--color-accent);
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }

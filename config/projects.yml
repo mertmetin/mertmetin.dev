@@ -1,5 +1,7 @@
 # Projects shown on the site, in display order.
 - slug: rabbit
+  repo: mertmetin/rabbit-server
+  language: TypeScript
   name: Rabbit
   tagline: Grocery delivery in Ottawa, built end to end
   year: 2020–2026
@@ -23,6 +25,8 @@
     - { label: 2021 Laravel API, url: "https://github.com/mertmetin/rabbit-api" }
 
 - slug: productsearch
+  repo: mertmetin/productsearch
+  language: Python
   name: productsearch
   tagline: Product search, 2014 vs 2026, measured
   year: 2014 / 2026
@@ -42,6 +46,8 @@
     - { label: Code and results, url: "https://github.com/mertmetin/productsearch" }
 
 - slug: geolocation
+  repo: mertmetin/Geolocation-Prediction
+  language: Python
   name: Geolocation-Prediction
   tagline: My University of Ottawa thesis, rebuilt
   year: 2019 / 2026
@@ -63,6 +69,8 @@
     - { label: Datasets, url: "https://github.com/mertmetin/Canadian-Twitter-users-and-tweets-datasets" }
 
 - slug: real-estate
+  repo: mertmetin-ca/mertmetin-site
+  language: PHP
   name: Real-estate platform
   tagline: The software behind my real-estate practice
   year: 2025–2026
