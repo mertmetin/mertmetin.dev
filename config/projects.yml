@@ -1,0 +1,82 @@
+# Projects shown on the site, in display order.
+- slug: rabbit
+  name: Rabbit
+  tagline: Grocery delivery in Ottawa, built end to end
+  year: 2020–2026
+  stat: 3 apps, 1 backend
+  stat_label: customer app, driver app, API and admin on AWS
+  summary: >-
+    A delivery platform where a driver shops each order by hand and brings it to
+    the customer's door. I built all of it: the TypeScript backend and admin
+    dashboard, the customer app, the driver app, payments and the AWS deployment.
+  highlights:
+    - Next.js + Prisma API with 107 tests against a real MySQL database
+    - "Stripe authorise-then-charge: customers pay only for what the driver found"
+    - Delivery-time estimates from a queue model of orders, shopping and driving time
+    - Driver app with background location and spoken turn-by-turn navigation
+    - Docker on AWS ECS Fargate, deployed by GitHub Actions through OIDC with no stored keys
+  stack: [TypeScript, Next.js, Prisma, MySQL, React Native, Expo, Stripe, AWS]
+  links:
+    - { label: Backend, url: "https://github.com/mertmetin/rabbit-server" }
+    - { label: Customer app, url: "https://github.com/mertmetin/rabbit-app" }
+    - { label: Driver app, url: "https://github.com/mertmetin/rabbit-driver" }
+    - { label: 2021 Laravel API, url: "https://github.com/mertmetin/rabbit-api" }
+
+- slug: productsearch
+  name: productsearch
+  tagline: Product search, 2014 vs 2026, measured
+  year: 2014 / 2026
+  stat: "0.706 → 0.772"
+  stat_label: NDCG@10 on 480 human-labelled queries
+  summary: >-
+    My 2014 Django + Elasticsearch price-comparison search, rebuilt to answer one
+    question properly: how much better does modern search actually get, and how
+    do you know? Keyword, semantic and hybrid retrieval, scored against Wayfair's
+    WANDS relevance labels.
+  highlights:
+    - Hybrid search (BM25 + embeddings, reciprocal rank fusion) beats the 2014 approach on 217 of 480 queries
+    - "An off-the-shelf reranker made results slightly worse at 20× the latency, so it isn't the default"
+    - FastAPI web app with facets and a side-by-side 2014 vs 2026 view showing the human judgements
+  stack: [Python, BM25, sentence-transformers, FastAPI, evaluation]
+  links:
+    - { label: Code and results, url: "https://github.com/mertmetin/productsearch" }
+
+- slug: geolocation
+  name: Geolocation-Prediction
+  tagline: My University of Ottawa thesis, rebuilt
+  year: 2019 / 2026
+  stat: 88%
+  stat_label: of users placed within 161 km of home
+  summary: >-
+    Predicting where Canadian Twitter users live from what they tweet and who
+    they follow. Revisiting my thesis code, I found and fixed seven bugs,
+    including one that made every social-graph feature identical, then re-ran
+    everything under stricter evaluation.
+  highlights:
+    - "Social graph: a vote over friends' and followers' locations places 88% of users within 161 km"
+    - "Text: 61% within 161 km and a 42 km median error, up from 46% for the best 2019 model"
+    - Showed two 2019 models never learned anything; they predicted Toronto for everyone
+    - Web demo that maps the likely city and shows the words behind each guess
+  stack: [Python, scikit-learn, NLP, pandas, Gradio]
+  links:
+    - { label: Code and results, url: "https://github.com/mertmetin/Geolocation-Prediction" }
+    - { label: Datasets, url: "https://github.com/mertmetin/Canadian-Twitter-users-and-tweets-datasets" }
+
+- slug: real-estate
+  name: Real-estate platform
+  tagline: The software behind my real-estate practice
+  year: 2025–2026
+  stat: In production
+  stat_label: used every week with real clients
+  summary: >-
+    I also run a real-estate practice in Ottawa, and I built the systems it runs
+    on: listing search synced with the MLS, client accounts, automated market
+    reports, offer paperwork and AI agents that handle recurring work.
+  highlights:
+    - Listing search synced with the PropTx MLS feed, with saved searches and email alerts
+    - Monthly neighbourhood market reports, gated behind registration as MLS rules require
+    - "Offer writer: an MLS listing in, a pre-filled Ontario purchase agreement PDF out"
+    - Claude-based agents that draft market posts, newsletters and listing shortlists from live data
+  stack: [PHP, WordPress, Python, Twilio, LLM APIs]
+  links: []
+  private: true

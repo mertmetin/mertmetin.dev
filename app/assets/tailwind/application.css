@@ -1,1 +1,34 @@
 @import "tailwindcss";
+
+/* Colour tokens: one place to change the palette. Dark mode follows the OS. */
+@theme {
+  --color-paper: #fcfcfb;
+  --color-card: #ffffff;
+  --color-tint: #f2f1ee;
+  --color-line: #e4e3df;
+  --color-ink: #141413;
+  --color-ink-2: #4a4945;
+  --color-ink-3: #6f6e68;
+  --color-accent: #c84b18;
+  --color-accent-ink: #a83e12;
+
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #161615;
+    --color-card: #1f1f1d;
+    --color-tint: #2a2a27;
+    --color-line: #34342f;
+    --color-ink: #f2f1ec;
+    --color-ink-2: #c7c6bd;
+    --color-ink-3: #9a9991;
+    --color-accent: #d9541e;
+    --color-accent-ink: #f08a62;
+  }
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

@@ -1,0 +1,65 @@
+<section class="pt-10 pb-20 sm:pt-16 sm:pb-24" aria-labelledby="intro">
+  <p class="mb-4 text-sm font-medium text-accent-ink">Senior Software Engineer · Ottawa</p>
+  <h1 id="intro" class="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+    I build software people rely on every day, from delivery apps to search engines.
+  </h1>
+  <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-2 text-pretty">
+    Full-stack web and mobile apps, data pipelines, search and machine learning. My thesis at the
+    University of Ottawa was on machine learning for social-media geolocation, and I also run a
+    real-estate practice on software I wrote.
+  </p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <%= link_to "See my work", "#work", class: "rounded-lg bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:opacity-90" %>
+    <%= link_to "GitHub", "https://github.com/mertmetin", class: "rounded-lg border border-line px-5 py-2.5 text-sm font-semibold hover:bg-tint", rel: "me" %>
+  </div>
+</section>
+
+<section id="work" class="scroll-mt-8" aria-labelledby="work-heading">
+  <h2 id="work-heading" class="mb-6 text-sm font-semibold uppercase tracking-wider text-ink-3">Selected work</h2>
+  <div class="grid gap-5 md:grid-cols-2">
+    <% @projects.each do |project| %>
+      <%= link_to project_path(project), class: "group flex flex-col rounded-2xl border border-line bg-card p-6 transition hover:-translate-y-0.5 hover:border-ink-3 focus-visible:outline-2 focus-visible:outline-accent" do %>
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="text-lg font-semibold tracking-tight"><%= project.name %></h3>
+          <span class="shrink-0 text-xs text-ink-3"><%= project.year %></span>
+        </div>
+        <p class="mt-1 text-ink-2"><%= project.tagline %></p>
+        <div class="mt-6">
+          <p class="text-3xl font-semibold tracking-tight tabular-nums"><%= project.stat %></p>
+          <p class="mt-1 text-sm text-ink-3"><%= project.stat_label %></p>
+        </div>
+        <ul class="mt-6 flex flex-wrap gap-1.5" aria-label="Technologies">
+          <% project.stack.first(5).each do |tech| %>
+            <li class="rounded-full bg-tint px-2.5 py-0.5 text-xs text-ink-2"><%= tech %></li>
+          <% end %>
+        </ul>
+        <span class="mt-6 text-sm font-medium text-accent-ink">Read more <span aria-hidden="true" class="inline-block transition group-hover:translate-x-0.5">→</span></span>
+      <% end %>
+    <% end %>
+  </div>
+</section>
+
+<section id="about" class="scroll-mt-8 pt-24" aria-labelledby="about-heading">
+  <div class="grid gap-10 md:grid-cols-[1fr_2fr]">
+    <h2 id="about-heading" class="text-sm font-semibold uppercase tracking-wider text-ink-3">About</h2>
+    <div class="space-y-5 text-lg leading-relaxed text-ink-2">
+      <p>
+        I like taking a product from an empty repo to something real people use: designing the data
+        model, building the API and the apps on top of it, wiring up payments and notifications, and
+        deploying it all to the cloud with tests and CI behind it.
+      </p>
+      <p>
+        I also care about measuring whether things actually work. When I revisited my 2014 product search
+        and my 2019 thesis, the most useful thing I did was set up honest evaluations, which turned up
+        bugs, models that had never learned anything, and an "upgrade" that made results worse.
+      </p>
+      <p>
+        I'm open to <strong class="font-semibold text-ink">senior software engineering</strong> and
+        <strong class="font-semibold text-ink">ML / AI engineering</strong> roles in Ottawa or remote.
+      </p>
+      <p>
+        <%= link_to "github.com/mertmetin", "https://github.com/mertmetin", class: "font-medium text-accent-ink underline underline-offset-4", rel: "me" %>
+      </p>
+    </div>
+  </div>
+</section>
