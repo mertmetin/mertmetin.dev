@@ -22,15 +22,42 @@
       </div>
     </div>
 
-    <%# Terminal %>
-    <figure class="overflow-hidden rounded-xl border border-line bg-card shadow-2xl shadow-black/20" aria-label="A terminal introducing Mert">
+    <%# Terminal: interactive with JavaScript, a static transcript without it. %>
+    <figure class="overflow-hidden rounded-xl border border-line bg-card shadow-2xl shadow-black/20"
+            aria-label="An interactive terminal: type help to see the commands"
+            data-controller="terminal"
+            data-terminal-projects-value="<%= @projects.map { |p| { slug: p.slug, name: p.name, tagline: p.tagline, stat: p.stat, stat_label: p.stat_label, url: project_path(p) } }.to_json %>"
+            data-terminal-github-url-value="https://github.com/mertmetin"
+            data-action="click->terminal#focus">
       <div class="flex items-center gap-2 border-b border-line px-4 py-3">
         <span class="size-3 rounded-full bg-[#ff5f57]" aria-hidden="true"></span>
         <span class="size-3 rounded-full bg-[#febc2e]" aria-hidden="true"></span>
         <span class="size-3 rounded-full bg-[#28c840]" aria-hidden="true"></span>
         <span class="ml-2 font-mono text-xs text-ink-3">mert@ottawa: ~</span>
       </div>
-      <pre class="overflow-x-auto p-5 font-mono text-[12.5px] leading-6 whitespace-pre-wrap text-ink-2 sm:text-[13px] lg:whitespace-pre"><span class="text-accent-ink">$</span> <span class="text-ink">whoami</span>
+
+      <div class="h-[19rem] font-mono text-[12.5px] leading-6 text-ink-2 sm:text-[13px]">
+        <div data-terminal-target="output" class="h-[calc(100%-2.75rem)] overflow-y-auto px-5 pt-4 break-words" role="log" aria-live="polite" hidden></div>
+        <form data-terminal-target="form" data-action="submit->terminal#submit" class="flex items-center gap-2 px-5 pb-4" hidden>
+          <label for="terminal-input" class="text-accent-ink">$</label>
+          <input id="terminal-input" data-terminal-target="input" data-action="keydown->terminal#keydown"
+                 class="min-w-0 flex-1 bg-transparent text-ink caret-accent outline-none placeholder:text-ink-3"
+                 autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"
+                 placeholder="type help" aria-label="Terminal command">
+        </form>
+
+        <div data-terminal-target="game" class="h-full px-4 pt-3 pb-2" hidden>
+          <div class="mb-2 flex items-center justify-between text-xs text-ink-3">
+            <span>🐇 rabbit run · delivered <span data-terminal-target="score" class="text-accent-ink">0</span></span>
+            <span class="hidden sm:inline">arrows / WASD · esc to quit</span>
+            <span class="sm:hidden">swipe · <button type="button" class="underline" data-action="terminal#quitGame">quit</button></span>
+          </div>
+          <canvas data-terminal-target="canvas" class="block w-full touch-none rounded-md"
+                  data-action="touchstart->terminal#touchstart touchmove->terminal#touchmove"
+                  aria-label="Rabbit Run game board"></canvas>
+        </div>
+
+      <pre data-terminal-target="static" class="overflow-x-auto px-5 pt-4 whitespace-pre-wrap lg:whitespace-pre"><span class="text-accent-ink">$</span> <span class="text-ink">whoami</span>
 Mert Metin · Senior Software Engineer · Ottawa, ON
 
 <span class="text-accent-ink">$</span> <span class="text-ink">cat stack.txt</span>
@@ -42,6 +69,7 @@ Mert Metin · Senior Software Engineer · Ottawa, ON
 <% @projects.each do |p| %><%= link_to "#{p.slug}/", project_path(p), class: "text-cyan hover:underline" %>  <% end %>
 
 <span class="text-accent-ink">$</span> <span class="cursor" aria-hidden="true"></span></pre>
+      </div>
     </figure>
   </div>
 </section>
