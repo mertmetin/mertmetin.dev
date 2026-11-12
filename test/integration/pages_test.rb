@@ -4,7 +4,7 @@ class PagesTest < ActionDispatch::IntegrationTest
   test "home lists every project with a link to its page" do
     get root_path
     assert_response :success
-    assert_select "h1", /I build software/
+    assert_select "h1", /Senior Software Engineer/
     Project.all.each do |project|
       assert_select "a[href=?]", project_path(project), text: /#{Regexp.escape(project.name)}/
     end
@@ -15,7 +15,7 @@ class PagesTest < ActionDispatch::IntegrationTest
       get project_path(project)
       assert_response :success
       assert_select "h1", project.name
-      assert_select "li", text: project.highlights.first
+      assert_select "li", text: /#{Regexp.escape(project.highlights.first)}/
       project.links.each { |link| assert_select "a[href=?]", link.url }
     end
   end
