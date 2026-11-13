@@ -7,9 +7,17 @@ class Project
   ATTRIBUTES = %i[slug name repo language tagline year stat stat_label summary highlights stack].freeze
   attr_reader(*ATTRIBUTES, :links)
 
+  # Cached in production; re-read on every call in development and test, so
+  # edits to config/projects.yml show up without restarting the server.
   def self.all
-    @all ||= YAML.load_file(Rails.root.join("config/projects.yml")).map { new(**_1.symbolize_keys) }.freeze
+    return load_all if Rails.env.local?
+    @all ||= load_all
   end
+
+  def self.load_all
+    YAML.load_file(Rails.root.join("config/projects.yml")).map { new(**_1.symbolize_keys) }.freeze
+  end
+  private_class_method :load_all
 
   def self.find(slug)
     all.find { _1.slug == slug } or raise ActiveRecord::RecordNotFound, "No project #{slug}"
