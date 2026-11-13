@@ -24,10 +24,10 @@
     - { label: Driver app, url: "https://github.com/mertmetin/rabbit-driver" }
     - { label: 2021 Laravel API, url: "https://github.com/mertmetin/rabbit-api" }
 
-- slug: productsearch
-  repo: mertmetin/productsearch
+- slug: searchbench
+  repo: mertmetin/searchbench
   language: Python
-  name: productsearch
+  name: searchbench
   tagline: Product search, 2014 vs 2026, measured
   year: 2014 / 2026
   stat: "0.706 → 0.772"
@@ -43,7 +43,7 @@
     - FastAPI web app with facets and a side-by-side 2014 vs 2026 view showing the human judgements
   stack: [Python, BM25, sentence-transformers, FastAPI, evaluation]
   links:
-    - { label: Code and results, url: "https://github.com/mertmetin/productsearch" }
+    - { label: Code and results, url: "https://github.com/mertmetin/searchbench" }
 
 - slug: geolocation
   repo: mertmetin/Geolocation-Prediction
