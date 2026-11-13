@@ -131,6 +131,69 @@ Mert Metin · Senior Software Engineer · Ottawa, ON
   </div>
 </section>
 
+<%# ------------------------------------------------------------------ playground %>
+<section id="play" class="scroll-mt-20 pt-24" aria-labelledby="play-heading" data-controller="bug-hunt">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <h2 id="play-heading" class="font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> playground: bug hunt</h2>
+      <p class="mt-2 text-ink-2">Squash the bugs before they reach production. Every one is a real bug I found and fixed.</p>
+    </div>
+    <dl class="flex gap-5 font-mono text-sm">
+      <div><dt class="text-xs text-ink-3">squashed</dt><dd data-bug-hunt-target="score" class="text-accent-ink tabular-nums">0</dd></div>
+      <div><dt class="text-xs text-ink-3">shipped</dt><dd data-bug-hunt-target="shipped" class="text-[#f85149] tabular-nums">0</dd></div>
+      <div><dt class="text-xs text-ink-3">time</dt><dd data-bug-hunt-target="timer" class="tabular-nums">30s</dd></div>
+      <div><dt class="text-xs text-ink-3">best</dt><dd data-bug-hunt-target="best" class="tabular-nums">0</dd></div>
+    </dl>
+  </div>
+
+  <div class="overflow-hidden rounded-xl border border-line bg-card">
+    <div class="flex items-center gap-2 border-b border-line px-4 py-2.5 font-mono text-xs text-ink-3">
+      <span class="text-cyan">legacy/social/friends_metro.py</span>
+      <span class="ml-auto rounded border border-line px-1.5 py-0.5">main</span>
+    </div>
+
+    <div data-bug-hunt-target="board" class="relative h-[23rem] select-none overflow-hidden">
+      <%# The real 2019 bug, as the backdrop. %>
+      <pre class="pointer-events-none absolute inset-0 overflow-hidden p-5 font-mono text-[12.5px] leading-6 text-ink-3/70" aria-hidden="true"><span class="text-violet">for</span> user <span class="text-violet">in</span> users:
+    screen_name = user[<span class="text-amber">3</span>]
+    friends = twts.get_friends(screen_name)
+    y.append(user_location)
+    <span class="rounded bg-[#f85149]/15 px-1 text-ink">cpy = D</span>          <span class="text-ink-3"># copies the reference, not the dict</span>
+
+    <span class="text-violet">for</span> friend <span class="text-violet">in</span> friends:
+        places = GeoText(friend[<span class="text-amber">5</span>])
+        <span class="text-violet">if</span> places.cities:
+            metro = check_metro(places.cities[<span class="text-amber">0</span>])
+            cpy[metro] = cpy[metro] + <span class="text-amber">1</span>
+
+    friends_locations.append(cpy)   <span class="text-ink-3"># every row is the same dict</span></pre>
+
+      <%# Production line at the bottom. %>
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 flex h-8 items-center justify-center border-t border-dashed border-[#f85149]/60 bg-[#f85149]/10 font-mono text-[11px] tracking-wider text-[#f85149]" aria-hidden="true">
+        PRODUCTION
+      </div>
+
+      <%# Fact card shown after squashes. %>
+      <div data-bug-hunt-target="toast" class="pointer-events-none absolute top-3 right-3 left-3 z-10 max-w-sm rounded-lg border border-line bg-paper/95 p-3 shadow-lg sm:left-auto" role="status" hidden>
+        <p class="font-mono text-xs text-accent-ink">fixed: <span data-title></span></p>
+        <p class="mt-1 text-sm text-ink-2" data-body></p>
+      </div>
+
+      <%# Start / result overlay. %>
+      <div data-bug-hunt-target="start" class="absolute inset-0 z-20 grid place-items-center bg-paper/70 p-6 text-center backdrop-blur-[2px]">
+        <div>
+          <p class="text-4xl" aria-hidden="true">🐛</p>
+          <p data-result class="mx-auto mt-3 max-w-sm text-ink-2">30 seconds. Click or tap bugs to squash them. Don't let them ship.</p>
+          <button type="button" data-button data-action="bug-hunt#start"
+                  class="mt-5 rounded-md bg-accent px-5 py-2.5 font-mono text-sm font-semibold text-paper hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            Start bug hunt
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <%# ------------------------------------------------------------------ about %>
 <section id="about" class="scroll-mt-20 pt-24" aria-labelledby="about-heading">
   <h2 id="about-heading" class="mb-6 font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> about</h2>
