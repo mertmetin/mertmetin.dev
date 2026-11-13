@@ -5,7 +5,7 @@ import RabbitRun from "games/rabbit_run"
 // visitors can type commands, open projects and play Rabbit Run.
 export default class extends Controller {
   static targets = ["static", "output", "form", "input", "game", "canvas", "score"]
-  static values = { projects: Array, githubUrl: String }
+  static values = { projects: Array, githubUrl: String, postsUrl: String }
 
   connect() {
     this.history = []
@@ -119,6 +119,7 @@ export default class extends Controller {
           ["open <project>", "go to a project page (or cd <project>)"],
           ["about", "a bit more about me"],
           ["stack", "languages and tools I use"],
+          ["blog", "read what I've written"],
           ["contact", "how to reach me"],
           ["play", "play Rabbit Run 🐇"],
           ["clear", "clear the screen"],
@@ -167,6 +168,11 @@ export default class extends Controller {
       projects() { this.commands.ls.call(this) },
       work() { this.commands.ls.call(this) },
       game() { this.startGame() },
+      blog() {
+        this.print("opening writing…", "muted")
+        setTimeout(() => window.Turbo ? window.Turbo.visit(this.postsUrlValue) : (window.location = this.postsUrlValue), 250)
+      },
+      writing() { this.commands.blog.call(this) },
       cat([slug]) {
         const p = this.findProject(slug, "cat")
         if (!p) return

@@ -1,0 +1,18 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "726fed4a51d2361b5f091cc8b6cba8780f52b037069cf5a0e90c88fdcabe4847",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/projects/show.html.erb",
+      "line": 64,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to((Unresolved Model).new.url, :class => \"text-cyan hover:underline\")",
+      "confidence": "Weak",
+      "note": "Project::Link only accepts https URLs (raises otherwise; see test/models/project_test.rb), so a javascript: or data: URL can't reach this href."
+    }
+  ],
+  "brakeman_version": "8.1.0"
+}

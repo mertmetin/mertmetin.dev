@@ -28,6 +28,7 @@
             data-controller="terminal"
             data-terminal-projects-value="<%= @projects.map { |p| { slug: p.slug, name: p.name, tagline: p.tagline, stat: p.stat, stat_label: p.stat_label, url: project_path(p) } }.to_json %>"
             data-terminal-github-url-value="https://github.com/mertmetin"
+            data-terminal-posts-url-value="<%= posts_path %>"
             data-action="click->terminal#focus">
       <div class="flex items-center gap-2 border-b border-line px-4 py-3">
         <span class="size-3 rounded-full bg-[#ff5f57]" aria-hidden="true"></span>
@@ -274,6 +275,23 @@ Mert Metin · Senior Software Engineer · Ottawa, ON
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<%# ------------------------------------------------------------------ writing %>
+<section id="writing" class="scroll-mt-20 pt-24" aria-labelledby="writing-heading">
+  <div class="mb-6 flex items-baseline justify-between gap-3">
+    <h2 id="writing-heading" class="font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> writing</h2>
+    <%= link_to "all posts →", posts_path, class: "font-mono text-sm text-ink-2 hover:text-accent-ink" %>
+  </div>
+  <div class="grid gap-4 md:grid-cols-3">
+    <% @posts.each do |post| %>
+      <%= link_to post_path(post), class: "group flex flex-col rounded-xl border border-line bg-card p-5 transition hover:border-ink-3" do %>
+        <p class="font-mono text-xs text-ink-3"><%= post.reading_minutes %> min read</p>
+        <h3 class="mt-2 font-semibold tracking-tight text-pretty group-hover:text-accent-ink"><%= post.title %></h3>
+        <p class="mt-2 text-sm text-ink-2 text-pretty"><%= post.summary %></p>
+      <% end %>
+    <% end %>
   </div>
 </section>
 

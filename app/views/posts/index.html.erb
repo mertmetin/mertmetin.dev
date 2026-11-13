@@ -1,0 +1,22 @@
+<% content_for :title, "Writing" %>
+<% content_for :description, "Notes on things I built, broke and measured." %>
+
+<section class="pt-10 sm:pt-14">
+  <h1 class="font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> writing</h1>
+  <p class="mt-3 max-w-2xl text-2xl font-semibold tracking-tight text-pretty sm:text-3xl">Notes on things I built, broke and measured.</p>
+
+  <ol class="mt-10 divide-y divide-line border-y border-line">
+    <% @posts.each do |post| %>
+      <li>
+        <%= link_to post_path(post), class: "group grid gap-1 py-6 sm:grid-cols-[8rem_1fr] sm:gap-6" do %>
+          <time datetime="<%= post.date.iso8601 %>" class="font-mono text-xs text-ink-3 sm:pt-1.5"><%= post.date.strftime("%b %-d, %Y") %></time>
+          <div>
+            <h2 class="text-lg font-semibold tracking-tight group-hover:text-accent-ink"><%= post.title %></h2>
+            <p class="mt-1 text-ink-2"><%= post.summary %></p>
+            <p class="mt-2 font-mono text-xs text-ink-3"><%= post.reading_minutes %> min read · <%= post.tags.map { "##{_1}" }.join("  ") %></p>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</section>
