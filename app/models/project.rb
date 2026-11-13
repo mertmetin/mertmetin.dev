@@ -2,7 +2,14 @@
 # database table yet, but the interface matches what an Active Record model
 # would give the views, so it can move to the database later.
 class Project
-  Link = Data.define(:label, :url)
+  # Only https links are allowed, so a "javascript:" URL can never end up in
+  # an href, even if project content later comes from a database or a form.
+  Link = Data.define(:label, :url) do
+    def initialize(label:, url:)
+      raise ArgumentError, "Project links must be https URLs: #{url.inspect}" unless URI.parse(url).is_a?(URI::HTTPS)
+      super
+    end
+  end
 
   ATTRIBUTES = %i[slug name repo language tagline year stat stat_label summary highlights stack].freeze
   attr_reader(*ATTRIBUTES, :links)
