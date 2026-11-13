@@ -107,7 +107,51 @@ export default class RabbitEnv {
   state() {
     return this.sensors().reduce((acc, on, i) => acc | ((on ? 1 : 0) << i), 0)
   }
+
+  // Richer input for the neural network (FEATURE_COUNT numbers):
+  //   the 11 sensors above
+  //   open space after moving straight / right / left (share of the board
+  //     reachable from there; small means a dead end)
+  //   a 5×5 view around the head (1 = wall or trail)
+  //   how far the grocery is, across and down (-1…1)
+  features() {
+    const out = new Float32Array(FEATURE_COUNT)
+    const sensors = this.sensors()
+    sensors.forEach((on, i) => { out[i] = on ? 1 : 0 })
+    for (let a = 0; a < 3; a++) out[11 + a] = this.openSpace(this.ahead(this.dirFor(a)))
+    const [hx, hy] = this.body[0]
+    let k = 14
+    for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) out[k++] = this.blocked([hx + dx, hy + dy]) ? 1 : 0
+    out[k++] = (this.item.x - hx) / COLS
+    out[k++] = (this.item.y - hy) / ROWS
+    return out
+  }
+
+  // Flood fill: what share of the free board can be reached from `start`.
+  openSpace(start) {
+    if (this.blocked(start)) return 0
+    const blocked = new Uint8Array(COLS * ROWS)
+    for (const [x, y] of this.body.slice(0, -1)) blocked[y * COLS + x] = 1
+    const free = COLS * ROWS - this.body.length
+    const queue = [start]
+    blocked[start[1] * COLS + start[0]] = 1
+    let seen = 0
+    while (queue.length && seen < free) {
+      const [x, y] = queue.pop()
+      seen += 1
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx
+        const ny = y + dy
+        if (nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS || blocked[ny * COLS + nx]) continue
+        blocked[ny * COLS + nx] = 1
+        queue.push([nx, ny])
+      }
+    }
+    return seen / free
+  }
 }
+
+export const FEATURE_COUNT = 11 + 3 + 25 + 2
 
 export const SENSOR_LABELS = [
   "danger ahead", "danger right", "danger left",

@@ -1,9 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
-import RabbitEnv, { SENSOR_LABELS, STATE_COUNT } from "games/rabbit_env"
+import RabbitEnv, { SENSOR_LABELS, STATE_COUNT, FEATURE_COUNT } from "games/rabbit_env"
 import RabbitBoard from "games/rabbit_board"
 import QAgent from "games/q_agent"
+import DQNAgent from "games/dqn_agent"
 
-// The AI lab: a Q-learning agent teaches itself Rabbit Run in the browser.
+// The AI lab: an agent teaches itself Rabbit Run in the browser, with one of
+// two brains: a Q-table over 11 yes/no sensors, or a neural network (DQN)
+// over 41 inputs that include a view around the head and open space ahead.
 // Watch speed shows every step; Fast and Turbo run many steps per frame and
 // draw only the latest position.
 const SPEEDS = { watch: 1, fast: 40, turbo: 600 }
@@ -12,11 +15,12 @@ const WINDOW = 20 // runs in the moving average
 
 export default class extends Controller {
   static targets = ["board", "curve", "sensors", "qvalues", "toggle", "episode", "average", "best", "epsilon", "seen",
-                    "alpha", "alphaOut", "gamma", "gammaOut", "speed", "status"]
+                    "alpha", "alphaOut", "gamma", "gammaOut", "speed", "status", "brain", "seenLabel"]
 
   connect() {
     this.board = new RabbitBoard(this.boardTarget)
     this.speed = "watch"
+    this.brain = "table"
     this.reset()
     this.observer = new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; if (!this.visible) this.pause() })
     this.observer.observe(this.element)
@@ -35,7 +39,11 @@ export default class extends Controller {
   reset() {
     this.pause()
     this.env = new RabbitEnv()
-    this.agent = new QAgent({ states: STATE_COUNT, alpha: Number(this.alphaTarget.value), gamma: Number(this.gammaTarget.value) })
+    const alpha = Number(this.alphaTarget.value)
+    const gamma = Number(this.gammaTarget.value)
+    this.agent = this.brain === "table"
+      ? new QAgent({ states: STATE_COUNT, alpha, gamma })
+      : new DQNAgent({ inputs: FEATURE_COUNT, learningRate: alpha / 100, gamma })
     this.scores = []
     this.best = 0
     this.lastAction = 0
@@ -68,15 +76,28 @@ export default class extends Controller {
     }
   }
 
+  setBrain(event) {
+    this.brain = event.currentTarget.dataset.brain
+    this.brainTargets.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.brain === this.brain)))
+    this.reset()
+  }
+
+  // What the current brain sees: a state number for the table, a feature
+  // vector for the network.
+  observe() {
+    return this.brain === "table" ? this.env.state() : this.env.features()
+  }
+
   setSpeed(event) {
     this.speed = event.currentTarget.dataset.speed
     this.speedTargets.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.speed === this.speed)))
   }
 
   tune() {
-    this.agent.alpha = Number(this.alphaTarget.value)
+    const alpha = Number(this.alphaTarget.value)
+    this.agent.alpha = alpha
     this.agent.gamma = Number(this.gammaTarget.value)
-    this.alphaOutTarget.textContent = this.agent.alpha.toFixed(2)
+    this.alphaOutTarget.textContent = alpha.toFixed(2)
     this.gammaOutTarget.textContent = this.agent.gamma.toFixed(2)
   }
 
@@ -101,10 +122,10 @@ export default class extends Controller {
   }
 
   step() {
-    const state = this.env.state()
+    const state = this.observe()
     const action = this.agent.act(state)
     const { reward, done } = this.env.step(this.env.dirFor(action))
-    this.agent.learn(state, action, reward, this.env.state(), done)
+    this.agent.learn(state, action, reward, this.observe(), done)
     this.lastAction = action
     if (done) this.endEpisode()
   }
@@ -126,7 +147,13 @@ export default class extends Controller {
     this.averageTarget.textContent = avg.toFixed(1)
     this.bestTarget.textContent = String(this.best)
     this.epsilonTarget.textContent = `${Math.round(this.agent.epsilon * 100)}%`
-    this.seenTarget.textContent = `${this.agent.statesSeen}`
+    if (this.brain === "table") {
+      this.seenLabelTarget.textContent = "situations seen"
+      this.seenTarget.textContent = `${this.agent.statesSeen} of ${STATE_COUNT}`
+    } else {
+      this.seenLabelTarget.textContent = "network 41→64→3"
+      this.seenTarget.textContent = `${this.agent.net.parameterCount.toLocaleString()} weights · loss ${this.agent.loss.toFixed(2)}`
+    }
     if (this.scores.length) this.statusTarget.textContent = this.verdict(avg)
   }
 
@@ -136,7 +163,8 @@ export default class extends Controller {
     if (avg < 10) return "Getting the hang of it."
     const watchHint = this.speed === "watch" ? "" : " Switch to Watch to see it play."
     if (avg < 18) return `Better than most first-time human players.${watchHint}`
-    return `Senior rabbit. 🐇${watchHint}`
+    if (avg < 30) return `Senior rabbit. 🐇${watchHint}`
+    return `Staff-level rabbit. It sees traps coming. 🐇✨${watchHint}`
   }
 
   // ---------------------------------------------------------------- drawing
@@ -187,8 +215,9 @@ export default class extends Controller {
       li.classList.toggle("text-ink-3", !active)
     })
 
-    const q = this.agent.values(this.env.state())
-    const best = this.agent.best(this.env.state())
+    const obs = this.observe()
+    const q = this.agent.values(obs)
+    const best = this.agent.best(obs)
     const scale = Math.max(1, ...q.map(Math.abs))
     q.forEach((v, i) => {
       const { row, bar, value } = this.qEls[i]
