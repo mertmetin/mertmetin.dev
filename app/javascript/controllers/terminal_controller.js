@@ -80,8 +80,33 @@ export default class extends Controller {
   run(line) {
     const [name, ...args] = line.split(/\s+/)
     const command = this.commands[name.toLowerCase()]
-    if (command) command.call(this, args)
-    else this.print([["muted", "command not found: "], ["ink", name], ["muted", ". Try "], ["cyan", "help"]])
+    if (command) return command.call(this, args)
+
+    // Be forgiving: a project name on its own opens it, phrases with a
+    // keyword get a nudge, and near-miss typos get a suggestion.
+    const lower = line.toLowerCase()
+    if (this.projectsValue.some((p) => p.slug === lower.replace(/\/$/, ""))) return this.commands.cat.call(this, [lower])
+    if (/\bhire|job|recruit/.test(lower)) return this.print([["muted", "sounds serious. try "], ["cyan", "sudo hire mert"]])
+    if (/\bgame|fun|bored/.test(lower)) return this.print([["muted", "you want "], ["cyan", "play"]])
+    const guess = this.closest(name.toLowerCase())
+    if (guess) return this.print([["muted", `command not found: ${name}. did you mean `], ["cyan", guess], ["muted", "?"]])
+    this.print([["muted", "command not found: "], ["ink", name], ["muted", ". Try "], ["cyan", "help"]])
+  }
+
+  // The known command within two edits of `word`, if there is one.
+  closest(word, candidates = Object.keys(this.commands).filter((n) => n.length >= 2)) {
+    const distance = (a, b) => {
+      const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)])
+      for (let j = 1; j <= b.length; j++) d[0][j] = j
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
+        }
+      }
+      return d[a.length][b.length]
+    }
+    const best = candidates.map((n) => [n, distance(word, n)]).sort((x, y) => x[1] - y[1])[0]
+    return best && best[1] <= 2 && word.length > 2 ? best[0] : null
   }
 
   get commands() {
@@ -91,7 +116,8 @@ export default class extends Controller {
           ["whoami", "who I am"],
           ["ls", "list projects"],
           ["cat <project>", "read a project's summary"],
-          ["open <project>", "go to a project page"],
+          ["open <project>", "go to a project page (or cd <project>)"],
+          ["about", "a bit more about me"],
           ["stack", "languages and tools I use"],
           ["contact", "how to reach me"],
           ["play", "play Rabbit Run 🐇"],
@@ -103,9 +129,44 @@ export default class extends Controller {
         this.print("Mert Metin · Senior Software Engineer · Ottawa, ON")
         this.print("Full-stack web and mobile, search and machine learning.", "muted")
       },
-      ls() {
-        this.print(this.projectsValue.map((p) => [["cyan", `${p.slug}/`], ["", "  "]]).flat())
+      ls(args = []) {
+        const all = args.some((a) => /^-\w*a/.test(a))
+        const items = this.projectsValue.map((p) => [["cyan", `${p.slug}/`], ["", "  "]]).flat()
+        if (all) items.unshift(["muted", ".bugs/ (all squashed)  "], ["muted", ".coffee  "])
+        this.print(items)
       },
+      cd([target]) {
+        if (!target || target === "~" || target === "/" || target === "~/") return this.print("you're home. try ls", "muted")
+        if (target === "..") return this.print("can't go higher than ~. this is as senior as the directory gets.", "muted")
+        if (["projects", "work", "projects/"].includes(target)) return this.commands.ls.call(this)
+        this.commands.open.call(this, [target])
+      },
+      pwd() { this.print("/home/mert/ottawa", "muted") },
+      about() {
+        this.print("I take products from an empty repo to something people use:", "ink")
+        this.print("data model → API → apps → payments → cloud, with tests and CI.", "muted")
+        this.print("I also like measuring whether things work. That's how I found", "muted")
+        this.print("7 bugs in my own thesis and a reranker that made search worse.", "muted")
+        this.print([["muted", "→ "], ["cyan", "ls"], ["muted", " to see the projects"]])
+      },
+      history() {
+        this.history.forEach((line, i) => this.print([["muted", `${String(i + 1).padStart(3)}  `], ["", line]]))
+      },
+      hi() {
+        const hour = new Date().getHours()
+        const part = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening"
+        this.print(`hey 👋 good ${part}! thanks for stopping by.`, "ink")
+        this.print([["muted", "try "], ["cyan", "ls"], ["muted", ", "], ["cyan", "about"], ["muted", " or "], ["cyan", "play"]])
+      },
+      hey() { this.commands.hi.call(this) },
+      hello() { this.commands.hi.call(this) },
+      yo() { this.commands.hi.call(this) },
+      what() { this.commands.help.call(this) },
+      man() { this.commands.help.call(this) },
+      "?"() { this.commands.help.call(this) },
+      projects() { this.commands.ls.call(this) },
+      work() { this.commands.ls.call(this) },
+      game() { this.startGame() },
       cat([slug]) {
         const p = this.findProject(slug, "cat")
         if (!p) return
@@ -158,7 +219,11 @@ export default class extends Controller {
       return null
     }
     const p = this.projectsValue.find((x) => x.slug === slug.replace(/\/$/, "").toLowerCase())
-    if (!p) this.print([["muted", `${verb}: no such project: `], ["ink", slug]])
+    if (!p) {
+      const guess = this.closest(slug.toLowerCase(), this.projectsValue.map((x) => x.slug))
+      if (guess) this.print([["muted", `${verb}: no such project: ${slug}. did you mean `], ["cyan", guess], ["muted", "?"]])
+      else this.print([["muted", `${verb}: no such project: `], ["ink", slug], ["muted", ". try "], ["cyan", "ls"]])
+    }
     return p
   }
 
