@@ -24,6 +24,53 @@
     - { label: Driver app, url: "https://github.com/mertmetin/rabbit-driver" }
     - { label: 2021 Laravel API, url: "https://github.com/mertmetin/rabbit-api" }
 
+- slug: worldline
+  repo: mertmetin/worldline
+  language: TypeScript
+  name: Worldline
+  tagline: An agentic AI game master with a world that remembers
+  year: "2026"
+  stat: 5 tools, 1 checker
+  stat_label: Claude proposes every change, code accepts or rejects it
+  summary: >-
+    An AI game master where you can type anything and the story branches for
+    real. Claude never edits the world directly: it proposes changes through
+    tools, a deterministic checker validates each one against a world graph,
+    and rejected changes go back to the model with a reason so it can fix its
+    plan before it narrates.
+  highlights:
+    - "A manual Claude tool loop: move, create, update, relate and share_fact all go through one validator"
+    - "Rejected tool calls return as is_error results with the rule that failed, so the agent self-corrects"
+    - Branching timeline that snapshots the world each turn, so you can rewind and try something else
+    - Invariant checks after every turn, and a per-turn trace of the agent's tool calls
+    - Offline mode with a rule-based stand-in, so the UI and checker run without an API key
+  stack: [TypeScript, Claude API, tool use, React, d3, node:test]
+  links:
+    - { label: Code, url: "https://github.com/mertmetin/worldline" }
+
+- slug: leaselens
+  repo: mertmetin/leaselens
+  language: TypeScript
+  name: LeaseLens
+  tagline: Flags Ontario lease clauses the law makes void
+  year: "2026"
+  stat: 21 rules
+  stat_label: each cited to the exact section of Ontario law
+  summary: >-
+    Paste an Ontario residential lease and see which clauses don't count under
+    the Residential Tenancies Act, each explained in plain English with a link
+    to the law. It runs entirely in the browser, and the same rules engine is
+    also an MCP server, so Claude can check a lease mid-conversation.
+  highlights:
+    - Live web app with no server; a Content-Security-Policy blocks every network request
+    - MCP server with check_lease, explain_rule, land transfer tax and mortgage payment tools
+    - Installs into Claude Code or Claude Desktop with one npx command
+    - Every section reference verified against the official e-Laws text
+  stack: [TypeScript, MCP, Vite, rules engine]
+  links:
+    - { label: Try it, url: "https://mertmetin.github.io/leaselens/" }
+    - { label: Code and MCP server, url: "https://github.com/mertmetin/leaselens" }
+
 - slug: searchbench
   repo: mertmetin/searchbench
   language: Python
@@ -67,6 +114,29 @@
   links:
     - { label: Code and results, url: "https://github.com/mertmetin/Geolocation-Prediction" }
     - { label: Datasets, url: "https://github.com/mertmetin/Canadian-Twitter-users-and-tweets-datasets" }
+
+- slug: reso-idx
+  repo: mertmetin/reso-idx
+  language: PHP
+  name: RESO IDX for WordPress
+  tagline: MLS listings from any RESO Web API feed, open source
+  year: "2026"
+  stat: "~3,400 listings"
+  stat_label: synced from a live Ontario feed in about three minutes
+  summary: >-
+    A WordPress plugin that syncs MLS listings from any RESO Web API feed and
+    shows them with a search block, a map and SEO-friendly listing pages, with
+    the board's IDX display rules built in. It's a clean, general version of
+    the search I built for my own brokerage site.
+  highlights:
+    - Incremental OData sync with a keyset cursor, retries, backoff and Retry-After
+    - IDX display rules enforced in the mapper, so hidden listings and addresses never show
+    - Server-rendered search block with filters and a live map, plus REST API and WP-CLI
+    - Sync logic is independent of WordPress and unit-tested; a reconcile guard stops a broken feed from emptying the site
+  stack: [PHP, WordPress, RESO Web API, OData, Leaflet]
+  links:
+    - { label: Live demo, url: "https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/mertmetin/reso-idx/main/blueprint.json" }
+    - { label: Code, url: "https://github.com/mertmetin/reso-idx" }
 
 - slug: real-estate
   repo: mertmetin-ca/mertmetin-site

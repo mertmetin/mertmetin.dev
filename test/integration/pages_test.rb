@@ -29,4 +29,19 @@ class PagesTest < ActionDispatch::IntegrationTest
     get project_path("nope")
     assert_response :not_found
   end
+
+  test "home has contact links and a share preview" do
+    get root_path
+    assert_select "a[href=?]", "mailto:mertmetin@outlook.com"
+    assert_select "meta[property='og:image'][content=?]", "https://mertmetin.dev/og.png"
+    assert_select "link[rel=canonical][href=?]", "https://mertmetin.dev/"
+  end
+
+  test "sitemap lists every page with absolute URLs" do
+    get sitemap_path
+    assert_response :success
+    assert_includes response.body, "<loc>https://mertmetin.dev/</loc>"
+    Project.all.each { assert_includes response.body, "https://mertmetin.dev/projects/#{_1.slug}/" }
+    Post.all.each { assert_includes response.body, "https://mertmetin.dev/writing/#{_1.slug}/" }
+  end
 end

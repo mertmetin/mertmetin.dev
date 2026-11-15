@@ -6,8 +6,19 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Mert Metin, Senior Software Engineer in Ottawa. Full-stack web and mobile apps, search and machine learning." %>">
     <meta name="color-scheme" content="dark light">
+    <% canonical_url = "#{SITE_URL}#{request.path == "/" ? "/" : request.path.chomp("/") + "/"}" %>
+    <link rel="canonical" href="<%= canonical_url %>">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="mertmetin.dev">
+    <meta property="og:url" content="<%= canonical_url %>">
     <meta property="og:title" content="<%= content_for?(:title) ? yield(:title) : "Mert Metin" %>">
-    <meta property="og:description" content="Senior Software Engineer in Ottawa">
+    <meta property="og:description" content="<%= content_for?(:description) ? yield(:description) : "Senior Software Engineer in Ottawa: full-stack, search, ML and agentic workflows." %>">
+    <meta property="og:image" content="<%= SITE_URL %>/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Mert Metin, Senior Software Engineer, mertmetin.dev">
+    <meta name="twitter:card" content="summary_large_image">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>
@@ -47,7 +58,7 @@
 
     <footer class="border-t border-line">
       <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-8 font-mono text-xs text-ink-3 sm:px-6">
-        <p>© <%= Date.current.year %> Mert Metin · Ottawa, ON</p>
+        <p>© <%= Date.current.year %> Mert Metin · Ottawa, ON · <%= mail_to "mertmetin@outlook.com", class: "underline decoration-line underline-offset-4 hover:text-ink" %></p>
         <p>Ruby on Rails <%= Rails.version %> · <%= link_to "source", "https://github.com/mertmetin/mertmetin.dev", class: "underline decoration-line underline-offset-4 hover:text-ink" %></p>
       </div>
     </footer>
