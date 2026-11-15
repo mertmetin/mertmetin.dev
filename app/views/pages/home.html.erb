@@ -110,6 +110,38 @@ Mert Metin · Senior Software Engineer · Ottawa, ON
   </div>
 </section>
 
+<%# ------------------------------------------------------------------ about %>
+<section id="about" class="scroll-mt-20 pt-24" aria-labelledby="about-heading">
+  <h2 id="about-heading" class="mb-6 font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> about</h2>
+  <div class="grid gap-10 md:grid-cols-[2fr_1fr]">
+    <div class="space-y-5 text-lg leading-relaxed text-ink-2">
+      <p>
+        I like taking a product from an empty repo to something real people use: designing the data
+        model, building the API and the apps on top of it, wiring up payments and notifications, and
+        deploying it all with tests and CI behind it. I especially like building agentic workflows: LLM
+        agents that call real tools through tool use and MCP, with code checking every action before it
+        touches real data.
+      </p>
+      <p>
+        I also care about measuring whether things actually work. Revisiting my 2014 product search and my
+        2019 University of Ottawa thesis, I set up honest evaluations, and they paid off: they caught real
+        bugs, models that had never actually learned anything, and an "upgrade" that made results worse, so
+        I could fix them.
+      </p>
+      <p>
+        Outside engineering I run a real-estate practice in Ottawa on software I wrote, so I'm used to
+        being my own most demanding user.
+      </p>
+    </div>
+    <dl class="h-fit space-y-4 rounded-xl border border-line bg-card p-5 font-mono text-sm">
+      <div><dt class="text-xs text-ink-3">location</dt><dd>Ottawa, ON · remote OK</dd></div>
+      <div><dt class="text-xs text-ink-3">looking_for</dt><dd>Senior SWE · ML/AI engineering · agentic workflows</dd></div>
+      <div><dt class="text-xs text-ink-3">education</dt><dd>University of Ottawa</dd></div>
+      <div><dt class="text-xs text-ink-3">github</dt><dd><%= link_to "@mertmetin", "https://github.com/mertmetin", class: "text-cyan hover:underline", rel: "me" %></dd></div>
+    </dl>
+  </div>
+</section>
+
 <%# ------------------------------------------------------------------ stack %>
 <section id="stack" class="scroll-mt-20 pt-24" aria-labelledby="stack-heading">
   <h2 id="stack-heading" class="mb-6 font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> stack</h2>
@@ -292,34 +324,5 @@ Mert Metin · Senior Software Engineer · Ottawa, ON
         <p class="mt-2 text-sm text-ink-2 text-pretty"><%= post.summary %></p>
       <% end %>
     <% end %>
-  </div>
-</section>
-
-<%# ------------------------------------------------------------------ about %>
-<section id="about" class="scroll-mt-20 pt-24" aria-labelledby="about-heading">
-  <h2 id="about-heading" class="mb-6 font-mono text-sm text-ink-3"><span class="text-accent-ink">//</span> about</h2>
-  <div class="grid gap-10 md:grid-cols-[2fr_1fr]">
-    <div class="space-y-5 text-lg leading-relaxed text-ink-2">
-      <p>
-        I like taking a product from an empty repo to something real people use: designing the data
-        model, building the API and the apps on top of it, wiring up payments and notifications, and
-        deploying it all with tests and CI behind it.
-      </p>
-      <p>
-        I also care about measuring whether things actually work. When I revisited my 2014 product search
-        and my 2019 University of Ottawa thesis, the most useful thing I did was set up honest evaluations,
-        which turned up bugs, models that had never learned anything, and an "upgrade" that made results worse.
-      </p>
-      <p>
-        Outside engineering I run a real-estate practice in Ottawa on software I wrote, so I'm used to
-        being my own most demanding user.
-      </p>
-    </div>
-    <dl class="h-fit space-y-4 rounded-xl border border-line bg-card p-5 font-mono text-sm">
-      <div><dt class="text-xs text-ink-3">location</dt><dd>Ottawa, ON · remote OK</dd></div>
-      <div><dt class="text-xs text-ink-3">looking_for</dt><dd>Senior SWE · ML/AI engineering</dd></div>
-      <div><dt class="text-xs text-ink-3">education</dt><dd>University of Ottawa</dd></div>
-      <div><dt class="text-xs text-ink-3">github</dt><dd><%= link_to "@mertmetin", "https://github.com/mertmetin", class: "text-cyan hover:underline", rel: "me" %></dd></div>
-    </dl>
   </div>
 </section>
