@@ -33,6 +33,7 @@ class PagesTest < ActionDispatch::IntegrationTest
   test "home has contact links and a share preview" do
     get root_path
     assert_select "a[href=?]", "mailto:mertmetin@outlook.com"
+    assert_select "a[href=?]", "https://www.linkedin.com/in/mert-metin/"
     assert_select "meta[property='og:image'][content=?]", "https://mertmetin.dev/og.png"
     assert_select "link[rel=canonical][href=?]", "https://mertmetin.dev/"
   end

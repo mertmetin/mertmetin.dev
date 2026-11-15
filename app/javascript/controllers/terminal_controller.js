@@ -5,7 +5,7 @@ import RabbitRun from "games/rabbit_run"
 // visitors can type commands, open projects and play Rabbit Run.
 export default class extends Controller {
   static targets = ["static", "output", "form", "input", "game", "canvas", "score"]
-  static values = { projects: Array, githubUrl: String, postsUrl: String, email: String }
+  static values = { projects: Array, githubUrl: String, postsUrl: String, email: String, linkedinUrl: String }
 
   connect() {
     this.history = []
@@ -195,8 +195,10 @@ export default class extends Controller {
       },
       contact() {
         if (this.emailValue) this.printLink(this.emailValue, `mailto:${this.emailValue}`)
+        if (this.linkedinUrlValue) this.printLink("linkedin.com/in/mert-metin", this.linkedinUrlValue)
         this.printLink("github.com/mertmetin", this.githubUrlValue)
       },
+      linkedin() { this.commands.contact.call(this) },
       email() { this.commands.contact.call(this) },
       mail() { this.commands.contact.call(this) },
       github() { this.commands.contact.call(this) },
